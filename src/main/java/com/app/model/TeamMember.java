@@ -11,6 +11,7 @@ import java.util.*;
 @DiscriminatorValue("TEAM_MEMBER")
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

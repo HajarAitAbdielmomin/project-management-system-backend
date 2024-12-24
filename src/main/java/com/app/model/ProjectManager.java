@@ -13,6 +13,7 @@ import java.util.*;
 @DiscriminatorValue("PROJECT_MANAGER")
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

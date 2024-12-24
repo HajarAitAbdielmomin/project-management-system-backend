@@ -11,6 +11,7 @@ import java.util.*;
 @DiscriminatorValue("PRODUCT_OWNER")
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
