@@ -29,8 +29,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter(Jwt jwt, UserDetailsServiceImpl userDetailsService) {
-        return new AuthTokenFilter(jwt, userDetailsService);
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
     }
 
     @Bean
@@ -54,7 +54,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, Jwt jwt, UserDetailsServiceImpl userDetailsService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 //Configures how to handle authentication errors
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
@@ -68,7 +68,7 @@ public class SecurityConfig {
 
         http.authenticationProvider(authenticationProvider()); //Handles the verification of authentication attempts
 
-        http.addFilterBefore(authenticationJwtTokenFilter(jwt, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
