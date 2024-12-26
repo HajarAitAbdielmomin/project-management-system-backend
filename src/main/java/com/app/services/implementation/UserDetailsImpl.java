@@ -1,12 +1,13 @@
-package com.app.service;
+package com.app.services.implementation;
 
-import com.app.model.User;
+import com.app.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Data
 public class UserDetailsImpl implements UserDetails {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;

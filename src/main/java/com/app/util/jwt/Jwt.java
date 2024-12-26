@@ -1,6 +1,6 @@
 package com.app.util.jwt;
 
-import com.app.service.UserDetailsImpl;
+import com.app.services.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

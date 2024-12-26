@@ -1,6 +1,6 @@
 package com.app.config;
 
-import com.app.service.UserDetailsServiceImpl;
+import com.app.services.implementation.UserDetailsServiceImpl;
 import com.app.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;

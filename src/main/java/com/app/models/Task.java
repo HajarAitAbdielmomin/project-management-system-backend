@@ -1,6 +1,4 @@
-package com.app.model;
-
-import java.util.Date;
+package com.app.models;
 
 import com.app.enums.TaskStatus;
 import jakarta.persistence.*;

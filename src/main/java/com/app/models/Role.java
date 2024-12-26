@@ -1,4 +1,4 @@
-package com.app.model;
+package com.app.models;
 
 import com.app.enums.ERole;
 import jakarta.persistence.*;
