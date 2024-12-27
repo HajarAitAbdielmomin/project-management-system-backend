@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface MapStructMapper {
-    User userToLoginRequestDTO(String username, String password);
+    User  loginRequestDTOToUser(String username, String password);
     SignupRequestDTO userToSignupRequestDTO(User user);
 }

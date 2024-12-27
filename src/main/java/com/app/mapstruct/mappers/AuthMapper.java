@@ -15,7 +15,7 @@ import javax.annotation.processing.Generated;
 @Component
 public class AuthMapper implements MapStructMapper {
     @Override
-    public User userToLoginRequestDTO(String username, String password) {
+    public User loginRequestDTOToUser(String username, String password) {
         if ( username == null || password == null ) {
             return null;
         }

@@ -1,8 +1,11 @@
 package com.app.services;
 
 
+import com.app.dto.JwtResponse;
 import com.app.dto.LoginRequestDTO;
+import com.app.exceptions.UserNotFoundException;
 
 public interface AuthService {
-    public boolean authenticateUser(LoginRequestDTO loginRequest);
+    public JwtResponse authenticateUser(LoginRequestDTO loginRequest)
+            throws UserNotFoundException;
 }
