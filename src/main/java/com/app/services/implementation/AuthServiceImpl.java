@@ -2,8 +2,12 @@ package com.app.services.implementation;
 
 import com.app.dto.JwtResponse;
 import com.app.dto.LoginRequestDTO;
+import com.app.dto.SignupRequestDTO;
+import com.app.enums.ERole;
+import com.app.exceptions.UserAlreadyExistsException;
 import com.app.exceptions.UserNotFoundException;
 import com.app.mapstruct.mappers.AuthMapper;
+import com.app.models.Role;
 import com.app.models.User;
 import com.app.repository.RoleRepository;
 import com.app.repository.UserRepository;
@@ -13,15 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -31,6 +34,8 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final Jwt jwt;
     private final AuthMapper authMapper;
+
+
     @Autowired
     public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper) {
         this.authenticationManager = authenticationManager;
@@ -39,7 +44,9 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = encoder;
         this.jwt = jwt;
         this.authMapper = authMapper;
+
     }
+
     @Override
     public JwtResponse authenticateUser(LoginRequestDTO loginRequest)
             throws UserNotFoundException
@@ -52,20 +59,78 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
+        //This allows other parts of the application to access the authenticated user's details.
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        //generate a JWT token for the authenticated user
         String jwt = this.jwt.generateJwtToken(authentication);
 
+        //The identity of the principal being authenticated
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+        //returning response containing the user's information and the generated JWT
         return JwtResponse.builder()
                 .id(userDetails.getId())
                 .token(jwt)
                 .email(userDetails.getUsername())
                 .roles(roles)
                 .build();
+    }
+
+    @Override
+    public boolean registerUser(SignupRequestDTO signupRequestDTO) throws UserAlreadyExistsException {
+        if(userRepository.existsByEmail(signupRequestDTO.getEmail()))
+            throw new UserAlreadyExistsException("User already exists");
+
+        User user= authMapper.SignupRequestDTOToUser(signupRequestDTO);
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        Set<String> strRoles = signupRequestDTO.getRole();
+        Set<Role> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+
+            strRoles.forEach(role -> {
+
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+                        break;
+                    case "team member":
+                        Role teamMemberRole = roleRepository.findByName(ERole.ROLE_TEAM_MEMBER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(teamMemberRole);
+                        break;
+                    case "product owner":
+                        Role productOwnerRole = roleRepository.findByName(ERole.ROLE_PRODUCT_OWNER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(productOwnerRole);
+                        break;
+                    case "project manager":
+                        Role projectManagerRole = roleRepository.findByName(ERole.ROLE_PROJECT_MANAGER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+
+            });
+        }
+
+        user.setRoles(roles);
+        userRepository.save(user);
+        return true;
     }
 }
