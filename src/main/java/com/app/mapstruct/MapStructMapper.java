@@ -12,5 +12,5 @@ import java.util.Set;
 public interface MapStructMapper {
     User  loginRequestDTOToUser(String username, String password);
     User SignupRequestDTOToUser(SignupRequestDTO signupRequest);
-    Set<Role> mapToRole(Set<String> roles);
+
 }

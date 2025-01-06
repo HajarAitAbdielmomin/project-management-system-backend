@@ -5,6 +5,7 @@ import com.app.dto.SignupRequestDTO;
 import com.app.exceptions.UserAlreadyExistsException;
 import com.app.exceptions.UserNotFoundException;
 import com.app.services.AuthService;
+import com.app.services.implementation.AuthServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthServiceImpl authService) {
         this.authService = authService;
     }
 

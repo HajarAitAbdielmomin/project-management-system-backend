@@ -30,7 +30,7 @@ public class Jwt {
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, key())
+                .signWith(key())
                 .compact();
     }
 

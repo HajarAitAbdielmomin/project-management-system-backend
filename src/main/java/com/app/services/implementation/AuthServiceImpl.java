@@ -1,5 +1,6 @@
 package com.app.services.implementation;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.app.dto.JwtResponse;
 import com.app.dto.LoginRequestDTO;
 import com.app.dto.SignupRequestDTO;
@@ -119,6 +120,7 @@ public class AuthServiceImpl implements AuthService {
                     case "project manager":
                         Role projectManagerRole = roleRepository.findByName(ERole.ROLE_PROJECT_MANAGER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(projectManagerRole);
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)

@@ -8,6 +8,7 @@ import java.util.List;
 @Builder
 public class JwtResponse {
     private String token;
+    @Builder.Default
     private String type = "Bearer";
     private Long id;
     private String email;
