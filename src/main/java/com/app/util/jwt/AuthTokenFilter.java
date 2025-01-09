@@ -1,5 +1,6 @@
 package com.app.util.jwt;
 
+import com.app.services.TokenBlacklistService;
 import com.app.services.implementation.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,11 +26,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     //Service for JWT operations
     private final Jwt jwt;
     private final UserDetailsServiceImpl userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Autowired
-    public AuthTokenFilter(Jwt jwt, UserDetailsServiceImpl userDetailsService) {
+    public AuthTokenFilter(Jwt jwt, UserDetailsServiceImpl userDetailsService, TokenBlacklistService tokenBlacklistService) {
         this.jwt = jwt;
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -37,6 +40,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwtToken = parseJwt(request);
             if (jwtToken != null && jwt.validateJwtToken(jwtToken)) {
+
+                // Token validation now includes blacklist check
+                if (tokenBlacklistService.isTokenBlacklisted(jwtToken)) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been blacklisted");
+                    return;
+                }
+
                 String username = jwt.getUserNameFromJwtToken(jwtToken);
 
                 //Loads user details from your database
