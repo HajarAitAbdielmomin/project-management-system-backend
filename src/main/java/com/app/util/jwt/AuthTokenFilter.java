@@ -40,6 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 String username = jwt.getUserNameFromJwtToken(jwtToken);
 
                 //Loads user details from your database
+                assert userDetailsService != null;
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =

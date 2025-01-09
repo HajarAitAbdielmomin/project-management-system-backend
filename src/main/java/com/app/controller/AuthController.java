@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signupRequestDTO)
             throws UserAlreadyExistsException {
             authService.registerUser(signupRequestDTO);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok("User registered successfully"); // lblan dyal created
     }
 
 }
