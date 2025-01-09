@@ -1,9 +1,11 @@
 package com.app.util.jwt;
 
+import com.app.services.TokenBlacklistService;
 import com.app.services.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -14,7 +16,10 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
+
 public class Jwt {
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Value("${hajar.app.jwtSecret}")
     private String jwtSecret;
@@ -47,6 +52,10 @@ public class Jwt {
 
     public boolean validateJwtToken(String authToken) {
         try {
+            // First check if token is blacklisted
+            if (tokenBlacklistService.isTokenBlacklisted(authToken)) {
+                return false;
+            }
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
