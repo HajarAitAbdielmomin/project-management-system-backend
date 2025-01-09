@@ -13,6 +13,7 @@ import com.app.models.User;
 import com.app.repository.RoleRepository;
 import com.app.repository.UserRepository;
 import com.app.services.AuthService;
+import com.app.services.TokenBlacklistService;
 import com.app.util.jwt.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,17 +36,18 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final Jwt jwt;
     private final AuthMapper authMapper;
+    private final TokenBlacklistService tokenBlacklistService;
 
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper, TokenBlacklistService tokenBlacklistService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jwt = jwt;
         this.authMapper = authMapper;
-
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -134,5 +136,20 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(roles);
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public boolean logoutUser(String authHeader) {
+        try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+                tokenBlacklistService.blacklistToken(token);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Error during logout", e);
+        }
+
     }
 }
