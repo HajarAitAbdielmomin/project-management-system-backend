@@ -1,6 +1,5 @@
 package com.app.services.implementation;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.app.dto.JwtResponse;
 import com.app.dto.LoginRequestDTO;
 import com.app.dto.SignupRequestDTO;
@@ -36,11 +35,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final Jwt jwt;
     private final AuthMapper authMapper;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper, TokenBlacklistService tokenBlacklistService) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper, TokenBlacklistServiceImpl tokenBlacklistService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

@@ -1,6 +1,6 @@
 package com.app.util.jwt;
 
-import com.app.services.TokenBlacklistService;
+import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,10 +26,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     //Service for JWT operations
     private final Jwt jwt;
     private final UserDetailsServiceImpl userDetailsService;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
     @Autowired
-    public AuthTokenFilter(Jwt jwt, UserDetailsServiceImpl userDetailsService, TokenBlacklistService tokenBlacklistService) {
+    public AuthTokenFilter(Jwt jwt, UserDetailsServiceImpl userDetailsService, TokenBlacklistServiceImpl tokenBlacklistService) {
         this.jwt = jwt;
         this.userDetailsService = userDetailsService;
         this.tokenBlacklistService = tokenBlacklistService;
@@ -39,31 +39,33 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwtToken = parseJwt(request);
-            if (jwtToken != null && jwt.validateJwtToken(jwtToken)) {
 
-                // Token validation now includes blacklist check
-                if (tokenBlacklistService.isTokenBlacklisted(jwtToken)) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been blacklisted");
-                    return;
+                if (jwtToken != null && jwt.validateJwtToken(jwtToken)) {
+
+                    // Token validation now includes blacklist check
+                    if (tokenBlacklistService.isTokenBlacklisted(jwtToken)) {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been blacklisted");
+                        return;
+                    }
+
+                    String username = jwt.getUserNameFromJwtToken(jwtToken);
+
+                    //Loads user details from your database
+                    assert userDetailsService != null;
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities());
+                    authentication.setDetails( //Extracts details from the HTTP request
+                            new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    //Stores the authentication object in the Security Context
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
-                String username = jwt.getUserNameFromJwtToken(jwtToken);
-
-                //Loads user details from your database
-                assert userDetailsService != null;
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities());
-                authentication.setDetails( //Extracts details from the HTTP request
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-
-                //Stores the authentication object in the Security Context
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
         }

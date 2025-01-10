@@ -1,5 +1,6 @@
 package com.app.config;
 
+import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsServiceImpl;
 import com.app.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
+    private final Jwt jwt;
+    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
     @Autowired
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+    public SecurityConfig(Jwt jwt,UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler,TokenBlacklistServiceImpl tokenBlacklistService) {
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
+        this.jwt = jwt;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwt, userDetailsService, tokenBlacklistService);
     }
 
     @Bean
@@ -63,6 +68,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
+                                .requestMatchers("/api/auth/logout").authenticated()
                                 .anyRequest().authenticated()
                 );
 

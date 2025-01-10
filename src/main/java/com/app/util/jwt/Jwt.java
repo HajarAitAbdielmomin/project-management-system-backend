@@ -1,13 +1,16 @@
 package com.app.util.jwt;
 
 import com.app.services.TokenBlacklistService;
+import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +19,20 @@ import java.util.Date;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 
 public class Jwt {
-    private final TokenBlacklistService tokenBlacklistService;
+    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
     @Value("${hajar.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${hajar.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    @Autowired
+    public Jwt(TokenBlacklistServiceImpl tokenBlacklistService) {
+        this.tokenBlacklistService = tokenBlacklistService;
+    }
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
