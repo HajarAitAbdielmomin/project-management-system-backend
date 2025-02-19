@@ -47,7 +47,7 @@ public class Project {
 	@JoinColumn(name = "product_owner_id")
 	private ProductOwner productOwner;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id", nullable = false)
 	private Team team;
 

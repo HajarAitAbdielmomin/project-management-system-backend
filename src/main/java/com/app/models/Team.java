@@ -35,8 +35,7 @@ public class Team {
 			fetch = FetchType.LAZY)
 	private List<TeamMember> members = new ArrayList<>();
 
-	@OneToMany(mappedBy = "team",
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-			fetch = FetchType.LAZY)
-	private List<Project> projects = new ArrayList<>();
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_id", nullable = false)
+	private Project project;
 }

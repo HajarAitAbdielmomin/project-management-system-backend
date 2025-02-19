@@ -24,7 +24,7 @@ public class Backlog {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank(message = "Task title is required")
+	@NotBlank(message = "Title is required")
 	@Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
 	@Column(nullable = false)
 	private String title;

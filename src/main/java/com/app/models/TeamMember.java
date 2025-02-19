@@ -23,4 +23,6 @@ public class TeamMember extends User {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Task> tasks = new HashSet<>();
+
+
 }
