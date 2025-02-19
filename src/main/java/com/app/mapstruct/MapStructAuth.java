@@ -5,7 +5,7 @@ import com.app.models.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface MapStruct {
+public interface MapStructAuth {
     User  loginRequestDTOToUser(String username, String password);
     User SignupRequestDTOToUser(SignupRequestDTO signupRequest);
 

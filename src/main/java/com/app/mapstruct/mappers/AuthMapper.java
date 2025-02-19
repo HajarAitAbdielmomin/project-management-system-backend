@@ -1,7 +1,7 @@
 package com.app.mapstruct.mappers;
 
 import com.app.dto.*;
-import com.app.mapstruct.MapStruct;
+import com.app.mapstruct.MapStructAuth;
 import com.app.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import javax.annotation.processing.Generated;
         comments = "version: 1.4.2.Final, compiler: javac, environment: Java 13.0.2 (Oracle Corporation)"
 )
 @Component
-public class AuthMapper implements MapStruct {
+public class AuthMapper implements MapStructAuth {
     @Override
     public User loginRequestDTOToUser(String username, String password) {
         if ( username == null || password == null ) {
