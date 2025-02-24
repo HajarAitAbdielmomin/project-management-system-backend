@@ -8,5 +8,4 @@ import org.mapstruct.Mapper;
 public interface MapStructAuth {
     User  loginRequestDTOToUser(String username, String password);
     User SignupRequestDTOToUser(SignupRequestDTO signupRequest);
-
 }
