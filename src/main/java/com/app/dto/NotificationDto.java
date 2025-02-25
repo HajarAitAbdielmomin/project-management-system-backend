@@ -14,8 +14,6 @@ import java.util.Set;
 @Value
 public class NotificationDto implements Serializable {
     Long id;
-    @Size(message = "Notification text cannot exceed 500 characters", max = 500)
-    @NotBlank(message = "Notification text cannot be blank")
     String text;
     LocalDateTime createdAt;
     Set<Long> usersIds;
