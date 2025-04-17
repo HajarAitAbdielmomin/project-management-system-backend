@@ -4,6 +4,7 @@ import com.app.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,11 @@ public class Task {
     @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
     @Column(nullable = false)
     private String title;
+
+    @Null
+    @Size(max = 1000, message = "Description must not exceed 1000 characters")
+    @Column(nullable = false)
+    private String description;
 
     @NotNull(message = "Status is required")
     @Column(nullable = false)
