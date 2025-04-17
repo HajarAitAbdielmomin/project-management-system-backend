@@ -28,6 +28,11 @@ public class Project {
 	@Column(nullable = false)
 	private String title;
 
+	@Null
+	@Size(max = 1000, message = "Description must not exceed 1000 characters")
+	@Column(nullable = false)
+	private String description;
+
 	@CreatedDate
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
