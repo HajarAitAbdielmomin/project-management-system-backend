@@ -1,4 +1,4 @@
-package com.app.mapstruct.mappers;
+package com.app.mapstruct.implementation;
 
 import org.springframework.stereotype.Component;
 
