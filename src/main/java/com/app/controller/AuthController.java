@@ -7,21 +7,19 @@ import com.app.exceptions.UserNotFoundException;
 import com.app.services.AuthService;
 import com.app.services.implementation.AuthServiceImpl;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthServiceImpl authService;
-
-    @Autowired
-    public AuthController(AuthServiceImpl authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest)
@@ -30,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signupRequestDTO)
+    public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequestDTO signupRequestDTO)
             throws UserAlreadyExistsException {
             authService.registerUser(signupRequestDTO);
         return ResponseEntity.ok("User registered successfully"); // lblan dyal created

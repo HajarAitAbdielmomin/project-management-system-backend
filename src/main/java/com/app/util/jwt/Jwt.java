@@ -19,7 +19,7 @@ import java.util.Date;
 
 @Slf4j
 @Component
-
+@RequiredArgsConstructor
 public class Jwt {
     private final TokenBlacklistServiceImpl tokenBlacklistService;
 
@@ -29,10 +29,6 @@ public class Jwt {
     @Value("${hajar.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    @Autowired
-    public Jwt(TokenBlacklistServiceImpl tokenBlacklistService) {
-        this.tokenBlacklistService = tokenBlacklistService;
-    }
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();

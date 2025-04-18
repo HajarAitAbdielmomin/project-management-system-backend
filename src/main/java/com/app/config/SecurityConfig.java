@@ -3,6 +3,7 @@ package com.app.config;
 import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsServiceImpl;
 import com.app.util.jwt.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,19 +20,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final Jwt jwt;
     private final TokenBlacklistServiceImpl tokenBlacklistService;
 
-    @Autowired
-    public SecurityConfig(Jwt jwt,UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler,TokenBlacklistServiceImpl tokenBlacklistService) {
-        this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
-        this.jwt = jwt;
-        this.tokenBlacklistService = tokenBlacklistService;
-    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

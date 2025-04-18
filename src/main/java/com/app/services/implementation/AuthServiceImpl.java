@@ -6,14 +6,14 @@ import com.app.dto.SignupRequestDTO;
 import com.app.enums.ERole;
 import com.app.exceptions.UserAlreadyExistsException;
 import com.app.exceptions.UserNotFoundException;
-import com.app.mapstruct.mappers.AuthMapper;
+import com.app.mappers.implementation.AuthMapperImpl;
 import com.app.models.Role;
 import com.app.models.User;
 import com.app.repository.RoleRepository;
 import com.app.repository.UserRepository;
 import com.app.services.AuthService;
-import com.app.services.TokenBlacklistService;
 import com.app.util.jwt.Jwt;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,26 +28,16 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final Jwt jwt;
-    private final AuthMapper authMapper;
+    private final AuthMapperImpl authMapperImpl;
     private final TokenBlacklistServiceImpl tokenBlacklistService;
 
-
-    @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, Jwt jwt, AuthMapper authMapper, TokenBlacklistServiceImpl tokenBlacklistService) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.jwt = jwt;
-        this.authMapper = authMapper;
-        this.tokenBlacklistService = tokenBlacklistService;
-    }
 
     @Override
     public JwtResponse authenticateUser(LoginRequestDTO loginRequest)
@@ -56,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         if(!userRepository.existsByEmail(loginRequest.getEmail()))
             throw new UserNotFoundException("User not found");
 
-        User user = authMapper.loginRequestDTOToUser(loginRequest.getEmail(),loginRequest.getPassword());
+        User user = authMapperImpl.loginRequestDTOToUser(loginRequest.getEmail(),loginRequest.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
@@ -82,13 +72,13 @@ public class AuthServiceImpl implements AuthService {
                 .roles(roles)
                 .build();
     }
-
+//zidi exception 3la 9bal msg annotations
     @Override
     public boolean registerUser(SignupRequestDTO signupRequestDTO) throws UserAlreadyExistsException {
         if(userRepository.existsByEmail(signupRequestDTO.getEmail()))
             throw new UserAlreadyExistsException("User already exists");
 
-        User user= authMapper.SignupRequestDTOToUser(signupRequestDTO);
+        User user= authMapperImpl.SignupRequestDTOToUser(signupRequestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
 
         Set<String> strRoles = signupRequestDTO.getRole();
