@@ -19,8 +19,7 @@ public class AuthMapperImpl implements AuthMapper {
         return User.builder()
                 .email(username)
                 .password(password)
-                .build()
-                ;
+                .build();
     }
 
 
