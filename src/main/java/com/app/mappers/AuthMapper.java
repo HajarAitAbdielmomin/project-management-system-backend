@@ -1,4 +1,4 @@
-package com.app.mapstruct;
+package com.app.mappers;
 
 import com.app.dto.SignupRequestDTO;
 import com.app.models.User;
