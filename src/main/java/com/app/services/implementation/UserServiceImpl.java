@@ -22,8 +22,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<UserDTO> updateUser(UserDTO userDTO, Long userId) {
+    public Optional<UserDTO> updateUser(UserDTO userDTO, Long userId){
+
       User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return Optional.empty();
+        }
+
       User updatedUser = userMapper.partialUpdate(userDTO, user);
 
       //Handle password update
