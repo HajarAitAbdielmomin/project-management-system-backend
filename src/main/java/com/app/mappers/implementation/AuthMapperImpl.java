@@ -1,7 +1,7 @@
-package com.app.mapstruct.implementation;
+package com.app.mappers.implementation;
 
 import com.app.dto.*;
-import com.app.mapstruct.AuthMapper;
+import com.app.mappers.AuthMapper;
 import com.app.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,12 +9,7 @@ import javax.annotation.processing.Generated;
 
 
 @Slf4j
-@Generated(
-        value = "org.mapstruct.ap.MappingProcessor",
-        date = "2021-03-11T19:21:44+0100",
-        comments = "version: 1.4.2.Final, compiler: javac, environment: Java 13.0.2 (Oracle Corporation)"
-)
-@Component
+@Component("AuthMapperImpl")
 public class AuthMapperImpl implements AuthMapper {
     @Override
     public User loginRequestDTOToUser(String username, String password) {
@@ -27,7 +22,6 @@ public class AuthMapperImpl implements AuthMapper {
                 .build()
                 ;
     }
-
 
 
     @Override
