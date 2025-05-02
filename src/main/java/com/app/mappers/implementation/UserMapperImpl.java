@@ -4,9 +4,12 @@ import com.app.dto.UserRelatedFeature.UserDTO;
 import com.app.mappers.UserMapper;
 import com.app.models.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-@Component
+@Primary
+@Slf4j
+@Component("UserMapperImpl")
 public class UserMapperImpl implements UserMapper {
     @Override
     public User toEntity(UserDTO userDTO) {
