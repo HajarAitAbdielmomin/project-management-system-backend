@@ -1,6 +1,7 @@
 package com.app.services;
 
 import com.app.dto.UserRelatedFeature.UserDTO;
+import com.app.exceptions.UserNotFoundException;
 
 import java.util.Optional;
 import java.util.List;
