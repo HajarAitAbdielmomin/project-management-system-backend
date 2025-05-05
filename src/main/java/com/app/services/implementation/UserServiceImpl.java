@@ -9,12 +9,14 @@ import com.app.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
@@ -47,11 +49,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDTO> getUser(Long id) {
-        return Optional.empty();
+        User user = userRepository.findById(id).orElse(null);
+        return Optional.ofNullable(userMapper.toDto(user));
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(userRepository::delete);
+        return user.isPresent();
     }
 }
