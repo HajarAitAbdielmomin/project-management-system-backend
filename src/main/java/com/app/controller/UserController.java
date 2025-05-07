@@ -34,4 +34,9 @@ public class UserController {
                 ResponseEntity.ok(userService.getUser(userId)) :
                 ResponseEntity.badRequest().body("User not found");
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 }

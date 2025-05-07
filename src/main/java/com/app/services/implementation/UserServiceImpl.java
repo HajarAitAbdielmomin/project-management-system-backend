@@ -1,6 +1,7 @@
 package com.app.services.implementation;
 
 import com.app.dto.UserRelatedFeature.UserDTO;
+import com.app.enums.ERole;
 import com.app.exceptions.UserNotFoundException;
 import com.app.mappers.UserMapper;
 import com.app.models.User;
@@ -44,7 +45,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return List.of();
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> !(role.getName() == ERole.ROLE_ADMIN)))
+                .map(userMapper::toDto)
+                .toList();
     }
 
     @Override
