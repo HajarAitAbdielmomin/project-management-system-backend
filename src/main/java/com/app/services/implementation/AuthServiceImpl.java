@@ -6,7 +6,8 @@ import com.app.dto.SignupRequestDTO;
 import com.app.enums.ERole;
 import com.app.exceptions.UserAlreadyExistsException;
 import com.app.exceptions.UserNotFoundException;
-import com.app.mappers.implementation.AuthMapperImpl;
+import com.app.mappers.LoginRequestMapper;
+import com.app.mappers.SignupRequestMapper;
 import com.app.models.Role;
 import com.app.models.User;
 import com.app.repository.RoleRepository;
@@ -14,7 +15,6 @@ import com.app.repository.UserRepository;
 import com.app.services.AuthService;
 import com.app.util.jwt.Jwt;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +35,8 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final Jwt jwt;
-    private final AuthMapperImpl authMapperImpl;
+    private final LoginRequestMapper loginRequestDTOMapper;
+    private final SignupRequestMapper signupRequestMapper;
     private final TokenBlacklistServiceImpl tokenBlacklistService;
 
 
@@ -46,8 +47,8 @@ public class AuthServiceImpl implements AuthService {
         if(!userRepository.existsByEmail(loginRequest.getEmail()))
             throw new UserNotFoundException("User not found");
 
-        User user = authMapperImpl.loginRequestDTOToUser(loginRequest.getEmail(),loginRequest.getPassword());
-
+        User user = loginRequestDTOMapper.toEntity(loginRequest);
+        System.out.println("Retrieved user"+user);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
@@ -78,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
         if(userRepository.existsByEmail(signupRequestDTO.getEmail()))
             throw new UserAlreadyExistsException("User already exists");
 
-        User user= authMapperImpl.SignupRequestDTOToUser(signupRequestDTO);
+        User user= signupRequestMapper.toEntity(signupRequestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
 
         Set<String> strRoles = signupRequestDTO.getRole();
