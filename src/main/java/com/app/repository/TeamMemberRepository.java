@@ -1,11 +1,12 @@
 package com.app.repository;
 
-import com.app.models.Project;
-import com.app.models.Role;
+import com.app.models.TeamMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface ProjectRepository extends JpaRepository<Project, Long> {
+public interface TeamMemberRepository extends JpaRepository<TeamMember, Long>{
 
 }
