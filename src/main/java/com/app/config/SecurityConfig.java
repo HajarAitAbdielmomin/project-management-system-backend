@@ -32,7 +32,7 @@ public class SecurityConfig {
         return new AuthTokenFilter(jwt, userDetailsService, tokenBlacklistService);
     }
 
-    @Bean
+ /*   @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
@@ -41,7 +41,7 @@ public class SecurityConfig {
 
         return authProvider;
     }
-
+*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -71,7 +71,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 );
 
-        http.authenticationProvider(authenticationProvider()); //Handles the verification of authentication attempts
+        //http.authenticationProvider(authenticationProvider()); //Handles the verification of authentication attempts
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
