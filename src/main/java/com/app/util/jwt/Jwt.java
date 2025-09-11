@@ -18,10 +18,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class Jwt {
 
-    @Value("${JWT_SECRET}")
+    @Value("${hajar.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${JWT_EXPIRATION.MS}")
+    @Value("${hajar.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
 
