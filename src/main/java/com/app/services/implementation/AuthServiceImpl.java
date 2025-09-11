@@ -37,18 +37,17 @@ public class AuthServiceImpl implements AuthService {
     private final Jwt jwt;
     private final LoginRequestMapper loginRequestDTOMapper;
     private final SignupRequestMapper signupRequestMapper;
-    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
 
     @Override
     public JwtResponse authenticateUser(LoginRequestDTO loginRequest)
             throws UserNotFoundException
     {
+
         if(!userRepository.existsByEmail(loginRequest.getEmail()))
             throw new UserNotFoundException("User not found");
 
         User user = loginRequestDTOMapper.toEntity(loginRequest);
-        System.out.println("Retrieved user"+user);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
@@ -84,7 +83,6 @@ public class AuthServiceImpl implements AuthService {
 
         Set<String> strRoles = signupRequestDTO.getRole();
         Set<Role> roles = new HashSet<>();
-
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -128,18 +126,5 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
-    @Override
-    public boolean logoutUser(String authHeader) {
-        try {
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String token = authHeader.substring(7);
-                tokenBlacklistService.blacklistToken(token);
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Error during logout", e);
-        }
 
-    }
 }

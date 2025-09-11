@@ -1,6 +1,5 @@
 package com.app.util.jwt;
 
-import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +24,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     //Service for JWT operations
     private final Jwt jwt;
     private final UserDetailsServiceImpl userDetailsService;
-    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
 
     @Override
@@ -34,38 +32,32 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwtToken = parseJwt(request);
 
-                if (jwtToken != null && jwt.validateJwtToken(jwtToken)) {
+            if (jwtToken != null && jwt.validateJwtToken(jwtToken)) {
 
-                    // Token validation now includes blacklist check
-                    if (tokenBlacklistService.isTokenBlacklisted(jwtToken)) {
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been blacklisted");
-                        return;
-                    }
+                String username = jwt.getUserNameFromJwtToken(jwtToken);
 
-                    String username = jwt.getUserNameFromJwtToken(jwtToken);
+                //Loads user details from your database
+                assert userDetailsService != null;
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    //Loads user details from your database
-                    assert userDetailsService != null;
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities());
+                authentication.setDetails( //Extracts details from the HTTP request
+                        new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    userDetails.getAuthorities());
-                    authentication.setDetails( //Extracts details from the HTTP request
-                            new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    //Stores the authentication object in the Security Context
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                //Stores the authentication object in the Security Context
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
         }
-
-        //Passes the request and response to the next filter in the chain
+        // Continue the filter chain
         filterChain.doFilter(request, response);
+
     }
 
     //Gets the JWT token from the request (the Authorization header)

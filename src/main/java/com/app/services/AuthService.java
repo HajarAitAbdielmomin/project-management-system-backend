@@ -14,5 +14,4 @@ public interface AuthService {
             throws UserNotFoundException;
     boolean registerUser(SignupRequestDTO signupRequestDTO)
             throws UserAlreadyExistsException;
-    boolean logoutUser(String authHeader);
 }

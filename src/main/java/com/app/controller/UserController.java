@@ -2,6 +2,7 @@ package com.app.controller;
 
 import com.app.dto.UserRelatedFeature.UserDTO;
 import com.app.services.implementation.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class UserController {
 
 
     @PatchMapping("/update/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO userDTO) {
         return userService.updateUser(userDTO, userId).isPresent() ?
                 ResponseEntity.ok("User updated successfully") :
                 ResponseEntity.badRequest().body("User not found");

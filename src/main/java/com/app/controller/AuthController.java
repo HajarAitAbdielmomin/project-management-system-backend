@@ -28,16 +28,11 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequestDTO signupRequestDTO)
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signupRequestDTO)
             throws UserAlreadyExistsException {
             authService.registerUser(signupRequestDTO);
         return ResponseEntity.ok("User registered successfully"); // lblan dyal created
     }
-    @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String authHeader) {
-        return authService.logoutUser(authHeader) ?
-                ResponseEntity.ok("User logged out successfully") :
-                ResponseEntity.badRequest().body("Invalid token format");
-    }
+
 
 }

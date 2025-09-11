@@ -1,6 +1,5 @@
 package com.app.util.jwt;
 
-import com.app.services.implementation.TokenBlacklistServiceImpl;
 import com.app.services.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +17,6 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class Jwt {
-    private final TokenBlacklistServiceImpl tokenBlacklistService;
 
     @Value("${hajar.app.jwtSecret}")
     private String jwtSecret;
@@ -52,10 +50,7 @@ public class Jwt {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            // First check if token is blacklisted
-            if (tokenBlacklistService.isTokenBlacklisted(authToken)) {
-                return false;
-            }
+
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
