@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import com.app.models.ProductOwner;
 import com.app.models.ProjectManager;
 import com.app.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
     Optional<User> findProjectManagerById(Long id);
+    Optional<User> findProductOwnerById(Long id);
 }
