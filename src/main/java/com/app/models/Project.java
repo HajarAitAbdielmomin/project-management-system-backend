@@ -46,14 +46,13 @@ public class Project {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_manager_id")
-	private ProjectManager projectManager;
+	private User projectManager;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_owner_id")
 	private ProductOwner productOwner;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "team_id", nullable = false)
+	@OneToOne(mappedBy = "project", fetch = FetchType.LAZY)
 	private Team team;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -3,6 +3,7 @@ package com.app.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Team {
 
 	@ManyToOne
 	@JoinColumn(name = "project_manager_id")
-	private ProjectManager projectManager;
+	private User projectManager;
 
 	@OneToMany(mappedBy = "team",
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
@@ -36,6 +37,6 @@ public class Team {
 	private List<TeamMember> members = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id", nullable = false)
+	@JoinColumn(name = "project_id")
 	private Project project;
 }

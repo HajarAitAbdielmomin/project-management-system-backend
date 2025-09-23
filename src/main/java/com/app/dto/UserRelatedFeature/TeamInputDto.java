@@ -1,18 +1,17 @@
 package com.app.dto.UserRelatedFeature;
 
+import com.app.models.Team;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * DTO for {@link com.app.models.Team}
+ * DTO for {@link Team}
  */
 @Builder
 @Getter
