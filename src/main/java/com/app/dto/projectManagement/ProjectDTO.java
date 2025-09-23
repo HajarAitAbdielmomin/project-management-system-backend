@@ -14,5 +14,4 @@ public class ProjectDTO implements Serializable {
     String description;
     Long projectManagerId;
     Long productOwnerId;
-    Set<Long> backlogsIds;
 }
