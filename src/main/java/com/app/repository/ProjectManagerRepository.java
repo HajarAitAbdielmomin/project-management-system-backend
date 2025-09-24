@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ProjectManagerRepository extends UserRepository {
+public interface ProjectManagerRepository extends JpaRepository<ProjectManager, Long> {
 
 }
