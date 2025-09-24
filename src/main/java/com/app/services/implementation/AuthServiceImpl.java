@@ -9,9 +9,8 @@ import com.app.exceptions.UserNotFoundException;
 import com.app.mappers.LoginRequestMapper;
 import com.app.mappers.SignupRequestMapper;
 import com.app.models.Role;
-import com.app.models.User;
-import com.app.repository.RoleRepository;
-import com.app.repository.UserRepository;
+import com.app.models.*;
+import com.app.repository.*;
 import com.app.services.AuthService;
 import com.app.util.jwt.Jwt;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -37,7 +37,9 @@ public class AuthServiceImpl implements AuthService {
     private final Jwt jwt;
     private final LoginRequestMapper loginRequestDTOMapper;
     private final SignupRequestMapper signupRequestMapper;
-
+    private final ProjectManagerRepository projectManagerRepository;
+    private final ProductOwnerRepository productOwnerRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     @Override
     public JwtResponse authenticateUser(LoginRequestDTO loginRequest)
@@ -72,7 +74,6 @@ public class AuthServiceImpl implements AuthService {
                 .roles(roles)
                 .build();
     }
-//zidi exception 3la 9bal msg annotations
     @Override
     public boolean registerUser(SignupRequestDTO signupRequestDTO) throws UserAlreadyExistsException {
         if(userRepository.existsByEmail(signupRequestDTO.getEmail()))
@@ -91,40 +92,80 @@ public class AuthServiceImpl implements AuthService {
 
             strRoles.forEach(role -> {
 
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "team member":
-                        Role teamMemberRole = roleRepository.findByName(ERole.ROLE_TEAM_MEMBER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(teamMemberRole);
-                        break;
-                    case "product owner":
-                        Role productOwnerRole = roleRepository.findByName(ERole.ROLE_PRODUCT_OWNER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(productOwnerRole);
-                        break;
-                    case "project manager":
-                        Role projectManagerRole = roleRepository.findByName(ERole.ROLE_PROJECT_MANAGER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(projectManagerRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
+                Map<String, ERole> roleMapping = Map.of(
+                        "admin", ERole.ROLE_ADMIN,
+                        "team member", ERole.ROLE_TEAM_MEMBER,
+                        "product owner", ERole.ROLE_PRODUCT_OWNER,
+                        "project manager", ERole.ROLE_PROJECT_MANAGER
+                );
+
+                ERole roleEnum = roleMapping.getOrDefault(role, ERole.ROLE_USER);
+                Role resolvedRole = roleRepository.findByName(roleEnum)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(resolvedRole);
+
 
             });
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        String userRole = getUserRole(roles);
+
+        switch (userRole) {
+            case "ROLE_PROJECT_MANAGER" ->
+                projectManagerRepository.save(
+                        ProjectManager.builder()
+                                .id(user.getId())
+                                .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                .email(user.getEmail())
+                                .password(user.getPassword())
+                                .createdAt(user.getCreatedAt())
+                                .updatedAt(user.getUpdatedAt())
+                                .roles(user.getRoles())
+                                .build()
+                );
+
+            case "ROLE_PRODUCT_OWNER" ->
+                productOwnerRepository.save(
+                        ProductOwner.builder()
+                                .id(user.getId())
+                                .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                .email(user.getEmail())
+                                .password(user.getPassword())
+                                .createdAt(user.getCreatedAt())
+                                .updatedAt(user.getUpdatedAt())
+                                .roles(user.getRoles())
+                                .build()
+                );
+
+            case "ROLE_TEAM_MEMBER" ->
+               teamMemberRepository.save(
+                       TeamMember.builder()
+                        .id(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .createdAt(user.getCreatedAt())
+                        .updatedAt(user.getUpdatedAt())
+                        .roles(user.getRoles())
+                        .build()
+                );
+            default -> userRepository.save(user);
+
+        }
+
         return true;
     }
 
+    private String getUserRole(Set<Role> roles) {
+        return roles.stream()
+                .map(role -> role.getName().name())
+                .filter(roleName -> roleName.contains("ROLE_ADMIN") || roleName.contains("ROLE_PROJECT_MANAGER") || roleName.contains("ROLE_PRODUCT_OWNER") || roleName.contains("ROLE_TEAM_MEMBER") )
+                .findFirst()
+                .orElse("ROLE_USER");
+    }
 
 }
