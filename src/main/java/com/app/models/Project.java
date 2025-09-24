@@ -28,9 +28,8 @@ public class Project {
 	@Column(nullable = false)
 	private String title;
 
-	@Null
 	@Size(max = 1000, message = "Description must not exceed 1000 characters")
-	@Column(nullable = false)
+
 	private String description;
 
 	@CreatedDate
@@ -46,7 +45,7 @@ public class Project {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_manager_id")
-	private User projectManager;
+	private ProjectManager projectManager;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_owner_id")
