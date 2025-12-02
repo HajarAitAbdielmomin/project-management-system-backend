@@ -21,7 +21,7 @@ public class ProjectManager extends User {
 	@OneToMany(mappedBy = "projectManager",
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
 			fetch = FetchType.LAZY)
-	private List<Team> teams = new ArrayList<>();
+	private Set<Team> teams = new HashSet<>();
 
 	@OneToMany(mappedBy = "projectManager",
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
