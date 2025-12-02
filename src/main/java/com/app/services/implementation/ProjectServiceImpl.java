@@ -6,7 +6,8 @@ import com.app.mappers.ProjectMapper;
 import com.app.models.ProductOwner;
 import com.app.models.Project;
 import com.app.models.ProjectManager;
-import com.app.models.User;
+import com.app.repository.ProjectManagerRepository;
+import com.app.repository.ProductOwnerRepository;
 import com.app.repository.ProjectRepository;
 import com.app.repository.UserRepository;
 import com.app.services.ProjectService;
@@ -18,9 +19,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-    private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final ProjectManagerRepository projectManagerRepository;
+    private final ProductOwnerRepository projectOwnerRepository;
 
     @Override
     public Optional<Project> add(ProjectDTO projectDTO) throws UserNotFoundException {
@@ -29,15 +31,16 @@ public class ProjectServiceImpl implements ProjectService {
 
         if (project == null) return Optional.empty();
 
-
-        User projectManager = userRepository.findProjectManagerById(projectDTO.getProjectManagerId())
-                .orElseThrow(() -> new UserNotFoundException("Project Manager not found"));
-
-        User productOwner = userRepository.findProductOwnerById(projectDTO.getProductOwnerId())
+        ProductOwner productOwner = projectOwnerRepository.findById(projectDTO.getProductOwnerId())
                 .orElseThrow(() -> new UserNotFoundException("Product Owner not found"));
 
+        ProjectManager projectManager = projectManagerRepository.findById(projectDTO.getProjectManagerId())
+                .orElseThrow(() -> new UserNotFoundException("Project Manager not found"));
+
+
+        project.setProductOwner(productOwner);
         project.setProjectManager(projectManager);
-        project.setProductOwner((ProductOwner) productOwner);
+
 
         Project savedProject = projectRepository.save(project);
 
