@@ -21,7 +21,8 @@ public class TeamController {
     //@PreAuthorize("hasRole('project manager')")
     public ResponseEntity<?> createTeam(@Valid @RequestBody TeamInputDto  teamInputDto)
     throws ProjectNotFoundException, UserNotFoundException {
-        teamsService.add(teamInputDto);
-        return ResponseEntity.ok("A new Team added successfully");
+        return teamsService.add(teamInputDto).isPresent() ?
+                ResponseEntity.ok("Team created successfully") :
+                ResponseEntity.badRequest().body("Team not created");
     }
 }
