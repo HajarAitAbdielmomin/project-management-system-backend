@@ -36,7 +36,31 @@ public class TeamsServiceImpl implements TeamsService {
     }
     @Override
     public Optional<Team> add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException {
-    return null;
+
+        Team team = teamMapper.toEntity(teamInputDto);
+        System.out.println(teamInputDto.toString());
+        if (team == null) return Optional.empty();
+
+        Project project = projectRepository.findById(teamInputDto.getProjectId())
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
+
+        ProjectManager projectManager = projectManagerRepository.findById(teamInputDto.getProjectManagerId())
+                .orElseThrow(() -> new UserNotFoundException("Project Manager not found"));
+
+        team.setProjectManager(projectManager);
+        team.setProject(project);
+
+        List<TeamMember> users = new ArrayList<>();
+        for (Long userId : teamInputDto.getMembersId()) {
+            TeamMember user = teamMemberRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException("Team member not found"));
+            user.setTeam(team);
+            users.add(user);
+        }
+        team.setMembers(users);
+        Team savedTeam = teamRepository.save(team);
+
+        return Optional.of(savedTeam);
     }
     @Override
     public Optional<Team> update(Long id, TeamInputMapper teamInputMapper) {
