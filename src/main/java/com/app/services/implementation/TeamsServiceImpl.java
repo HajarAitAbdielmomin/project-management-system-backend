@@ -38,7 +38,7 @@ public class TeamsServiceImpl implements TeamsService {
     public Optional<Team> add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException {
 
         Team team = teamMapper.toEntity(teamInputDto);
-        System.out.println(teamInputDto.toString());
+
         if (team == null) return Optional.empty();
 
         Project project = projectRepository.findById(teamInputDto.getProjectId())
@@ -63,7 +63,7 @@ public class TeamsServiceImpl implements TeamsService {
         return Optional.of(savedTeam);
     }
     @Override
-    public Optional<Team> update(Long id, TeamInputMapper teamInputMapper) {
+    public Optional<Team> update(Long id, TeamInputDto teamInputDto) {
         return null;
     }
     @Override
