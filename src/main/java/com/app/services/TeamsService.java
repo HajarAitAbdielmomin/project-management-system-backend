@@ -15,7 +15,7 @@ public interface TeamsService {
 
     Optional<Team> add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException;
 
-    Optional<Team> update(Long id, TeamInputMapper teamInputMapper);
+    Optional<Team> update(Long id, TeamInputDto teamInputDto);
 
     Optional<TeamDTO> get(Long id);
 
