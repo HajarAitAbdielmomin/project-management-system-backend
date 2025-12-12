@@ -31,7 +31,6 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectManagerRepository projectManagerRepository;
     private final ProductOwnerRepository projectOwnerRepository;
     private final ProjectDetailsMapper projectDetailsMapper;
-    private  final TeamRepository teamRepository;
 
     @Override
     public Optional<Project> add(ProjectDTO projectDTO) throws UserNotFoundException {
@@ -81,7 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
     @Override
     public Optional<List<ProjectDetailsDTO>> getAllProjectsByUser(Long id) {
-        Optional<List<Project>> projects = projectRepository.findAllByUserId(id);
+        Optional<List<Project>> projects = projectRepository.findAllByProjectManagerId(id);
         return projects.map(projectList
                 -> projectList.stream().map(projectDetailsMapper::toDto).toList());
     }
