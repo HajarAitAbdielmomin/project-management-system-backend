@@ -1,10 +1,8 @@
 package com.app.services.implementation;
 
 import com.app.dto.UserRelatedFeature.TeamDTO;
-import com.app.dto.UserRelatedFeature.TeamInputDto;
-import com.app.enums.ERole;
+import com.app.dto.teamManagement.TeamInputDto;
 import com.app.exceptions.ProjectNotFoundException;
-import com.app.exceptions.UserAlreadyExistsException;
 import com.app.exceptions.UserNotFoundException;
 import com.app.mappers.TeamInputMapper;
 import com.app.models.*;
@@ -17,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -35,11 +31,11 @@ public class TeamsServiceImpl implements TeamsService {
         return false;
     }
     @Override
-    public Optional<Team> add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException {
+    public boolean add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException {
 
         Team team = teamMapper.toEntity(teamInputDto);
 
-        if (team == null) return Optional.empty();
+        if(team == null) return false;
 
         Project project = projectRepository.findById(teamInputDto.getProjectId())
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
@@ -58,9 +54,9 @@ public class TeamsServiceImpl implements TeamsService {
             users.add(user);
         }
         team.setMembers(users);
-        Team savedTeam = teamRepository.save(team);
+        teamRepository.save(team);
 
-        return Optional.of(savedTeam);
+        return true;
     }
     @Override
     public Optional<Team> update(Long id, TeamInputDto teamInputDto) {
@@ -71,7 +67,7 @@ public class TeamsServiceImpl implements TeamsService {
         return null;
     }
     @Override
-    public Optional<List<TeamDTO>> getAll() {
+    public List<TeamDTO> getAllByProjectManager() throws UserNotFoundException {
         return null;
     }
 }
