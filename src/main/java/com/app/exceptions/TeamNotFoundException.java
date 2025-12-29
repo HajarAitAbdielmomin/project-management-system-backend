@@ -1,7 +1,7 @@
 package com.app.exceptions;
 
 public class TeamNotFoundException extends RuntimeException {
-  public TeamNotFoundException(String message) {
-    super(message);
-  }
+    public TeamNotFoundException(String message) {
+        super(message);
+    }
 }
