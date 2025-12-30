@@ -11,8 +11,8 @@ import java.util.Optional;
 
 
 public interface ProjectService {
-    Optional<Project> add(ProjectDTO projectDTO) throws UserNotFoundException;
-    Optional<ProjectDetailsDTO> getProjectDetails(Long id) throws ProjectNotFoundException;
+    boolean add(ProjectDTO projectDTO) throws UserNotFoundException;
+    Optional<ProjectDetailsDTO> getProjectDetails(Long id);
     boolean delete(Long id);
     Optional<List<ProjectDetailsDTO>> getAllProjectsByUser(Long id);
     Optional<Project> update(Long id, ProjectDTO projectDTO);

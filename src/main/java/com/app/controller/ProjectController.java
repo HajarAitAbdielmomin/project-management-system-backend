@@ -20,7 +20,7 @@ public class ProjectController {
     @PostMapping("/add")
     public ResponseEntity<?> addProject(@Valid @RequestBody ProjectDTO projectDTO)
             throws UserNotFoundException {
-        return projectService.add(projectDTO).isPresent() ?
+        return projectService.add(projectDTO) ?
                 ResponseEntity.ok("Project added successfully") :
                 ResponseEntity.badRequest().body("Project not added");
     }

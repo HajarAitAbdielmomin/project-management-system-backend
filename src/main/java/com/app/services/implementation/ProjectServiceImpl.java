@@ -33,11 +33,11 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectDetailsMapper projectDetailsMapper;
 
     @Override
-    public Optional<Project> add(ProjectDTO projectDTO) throws UserNotFoundException {
+    public boolean add(ProjectDTO projectDTO) throws UserNotFoundException {
 
         Project project = projectMapper.toEntity(projectDTO);
 
-        if (project == null) return Optional.empty();
+        if (project == null) return false;
 
         ProductOwner productOwner = projectOwnerRepository.findById(projectDTO.getProductOwnerId())
                 .orElseThrow(() -> new UserNotFoundException("Product Owner not found"));
@@ -50,9 +50,9 @@ public class ProjectServiceImpl implements ProjectService {
         project.setProjectManager(projectManager);
 
 
-        Project savedProject = projectRepository.save(project);
+        projectRepository.save(project);
 
-        return Optional.of(savedProject);
+        return true;
     }
     @Override
     public Optional<Project> update(Long id, ProjectDTO projectDTO) {
@@ -72,10 +72,9 @@ public class ProjectServiceImpl implements ProjectService {
         return project.isPresent();
     }
     @Override
-    public Optional<ProjectDetailsDTO> getProjectDetails(Long id) throws ProjectNotFoundException{
-        Project project = projectRepository.findById(id).orElseThrow(
-                () -> new ProjectNotFoundException("Project not found with the id "+id)
-        );
+    public Optional<ProjectDetailsDTO> getProjectDetails(Long id) {
+        Project project = projectRepository.findById(id).orElseThrow();
+
         return Optional.of(projectDetailsMapper.toDto(project));
     }
     @Override
