@@ -1,13 +1,19 @@
 package com.app.dto.UserRelatedFeature;
 
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * DTO for {@link com.app.models.TeamMember}
  */
-@EqualsAndHashCode(callSuper = true)
-@Value
-public class TeamMemberDTO extends UserDTO {
-
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TeamMemberDTO implements Serializable {
+    String firstName;
+    String lastName;
+    String email;
 }

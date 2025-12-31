@@ -1,11 +1,11 @@
 package com.app.services;
 
-import com.app.dto.UserRelatedFeature.TeamDTO;
-import com.app.dto.teamManagement.TeamInputDto;
+import com.app.dto.UserRelatedFeature.TeamMemberDTO;
+import com.app.dto.teamManagement.TeamDTO;
 import com.app.exceptions.ProjectNotFoundException;
 import com.app.exceptions.TeamNotFoundException;
 import com.app.exceptions.UserNotFoundException;
-import com.app.models.Team;
+import com.app.models.TeamMember;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +13,13 @@ import java.util.Optional;
 public interface TeamsService {
     boolean delete(Long id);
 
-    boolean add(TeamInputDto teamInputDto) throws UserNotFoundException, ProjectNotFoundException;
+    boolean add(TeamDTO teamDto) throws UserNotFoundException, ProjectNotFoundException;
 
-    Optional<Team> update(Long id, TeamInputDto teamInputDto);
+    boolean update(Long id, TeamDTO teamInputDto) throws TeamNotFoundException, UserNotFoundException, ProjectNotFoundException;
 
     Optional<TeamDTO> get(Long id);
 
-    List<TeamDTO> getAllByProjectManager() throws UserNotFoundException;
+    Optional<List<TeamDTO>> getAllByProjectManager(Long id);
 
+    Optional<List<TeamMemberDTO>> getMembersByTeam(Long id);
 }

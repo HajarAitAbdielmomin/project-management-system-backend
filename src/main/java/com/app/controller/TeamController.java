@@ -1,13 +1,12 @@
 package com.app.controller;
 
-import com.app.dto.UserRelatedFeature.TeamInputDto;
+import com.app.dto.teamManagement.TeamDTO;
 import com.app.exceptions.ProjectNotFoundException;
 import com.app.exceptions.UserNotFoundException;
 import com.app.services.implementation.TeamsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -19,9 +18,9 @@ public class TeamController {
 
     @PostMapping("/create")
     //@PreAuthorize("hasRole('project manager')")
-    public ResponseEntity<?> createTeam(@Valid @RequestBody TeamInputDto  teamInputDto)
+    public ResponseEntity<?> createTeam(@Valid @RequestBody TeamDTO teamDTO)
     throws ProjectNotFoundException, UserNotFoundException {
-        return teamsService.add(teamInputDto).isPresent() ?
+        return teamsService.add(teamDTO) ?
                 ResponseEntity.ok("Team created successfully") :
                 ResponseEntity.badRequest().body("Team not created");
     }
