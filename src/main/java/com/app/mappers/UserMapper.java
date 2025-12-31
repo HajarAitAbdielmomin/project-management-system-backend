@@ -1,5 +1,6 @@
 package com.app.mappers;
 
+import com.app.dto.UserRelatedFeature.TeamMemberDTO;
 import com.app.dto.UserRelatedFeature.UserDTO;
 import com.app.models.User;
 import org.mapstruct.*;
@@ -9,6 +10,8 @@ public interface UserMapper {
     User toEntity(UserDTO userDTO);
 
     UserDTO toDto(User user);
+
+    TeamMemberDTO toDtoTeamMember(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     User partialUpdate(UserDTO userDTO, @MappingTarget User user);
