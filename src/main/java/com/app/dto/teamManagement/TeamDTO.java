@@ -1,4 +1,4 @@
-package com.app.dto.UserRelatedFeature;
+package com.app.dto.teamManagement;
 
 import com.app.models.Team;
 import jakarta.validation.constraints.NotBlank;
