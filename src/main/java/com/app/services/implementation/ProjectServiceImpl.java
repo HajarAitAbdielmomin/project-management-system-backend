@@ -75,9 +75,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
     @Override
     public Optional<ProjectDetailsDTO> getProjectDetails(Long id) {
-        Project project = projectRepository.findById(id).orElseThrow();
-
-        return Optional.of(projectDetailsMapper.toDto(project));
+        return projectRepository.findById(id)
+                .map(projectDetailsMapper::toDto);
     }
     @Override
     public Optional<List<ProjectDetailsDTO>> getAllProjectsByUser(Long id) {
