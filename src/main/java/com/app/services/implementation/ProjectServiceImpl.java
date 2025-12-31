@@ -55,14 +55,16 @@ public class ProjectServiceImpl implements ProjectService {
         return true;
     }
     @Override
-    public Optional<Project> update(Long id, ProjectDTO projectDTO) {
-        Optional<Project> project = projectRepository.findById(id);
-        if (project.isPresent()) {
-            Project projectToUpdate = project.get();
-            projectToUpdate.setTitle(projectDTO.getTitle());
-            projectToUpdate.setDescription(projectDTO.getDescription());
-            return Optional.of(projectRepository.save(projectToUpdate));
-        } else return Optional.empty();
+    public boolean update(Long id, ProjectDTO projectDTO) throws ProjectNotFoundException{
+        Project project = projectRepository.findById(id).orElseThrow(
+                () -> new ProjectNotFoundException("Project not found")
+        );
+
+        project.setTitle(projectDTO.getTitle());
+        project.setDescription(projectDTO.getDescription());
+        projectRepository.save(project);
+
+        return true;
 
     }
     @Override

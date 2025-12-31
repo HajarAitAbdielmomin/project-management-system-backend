@@ -26,7 +26,7 @@ public class ProjectController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> getProject(@PathVariable Long id) throws ProjectNotFoundException {
+    public ResponseEntity<?> getProject(@PathVariable Long id)  {
         return ResponseEntity.ok(projectService.getProjectDetails(id));
 
     }
@@ -44,8 +44,8 @@ public class ProjectController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
-        return projectService.update(id, projectDTO).isPresent() ?
+    public ResponseEntity<?> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) throws ProjectNotFoundException {
+        return projectService.update(id, projectDTO) ?
                 ResponseEntity.ok("Project updated successfully") :
                 ResponseEntity.badRequest().body("Project not updated");
     }

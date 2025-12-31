@@ -15,5 +15,5 @@ public interface ProjectService {
     Optional<ProjectDetailsDTO> getProjectDetails(Long id);
     boolean delete(Long id);
     Optional<List<ProjectDetailsDTO>> getAllProjectsByUser(Long id);
-    Optional<Project> update(Long id, ProjectDTO projectDTO);
+    boolean update(Long id, ProjectDTO projectDTO) throws ProjectNotFoundException;
 }
