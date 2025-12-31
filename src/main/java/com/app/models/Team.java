@@ -37,6 +37,6 @@ public class Team {
 	private List<TeamMember> members = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id")
+	@JoinColumn(name = "project_id", foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL"))
 	private Project project;
 }
