@@ -2,6 +2,7 @@ package com.app.services;
 
 import com.app.dto.UserRelatedFeature.TeamMemberDTO;
 import com.app.dto.teamManagement.TeamDTO;
+import com.app.dto.teamManagement.TeamDetailsDTO;
 import com.app.exceptions.ProjectNotFoundException;
 import com.app.exceptions.TeamNotFoundException;
 import com.app.exceptions.UserNotFoundException;
@@ -17,7 +18,7 @@ public interface TeamsService {
 
     boolean update(Long id, TeamDTO teamInputDto) throws TeamNotFoundException, UserNotFoundException, ProjectNotFoundException;
 
-    Optional<TeamDTO> get(Long id);
+    Optional<TeamDetailsDTO> get(Long id);
 
     Optional<List<TeamDTO>> getAllByProjectManager(Long id);
 
