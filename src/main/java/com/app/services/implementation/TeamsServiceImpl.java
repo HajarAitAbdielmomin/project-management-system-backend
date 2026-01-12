@@ -2,9 +2,11 @@ package com.app.services.implementation;
 
 import com.app.dto.UserRelatedFeature.TeamMemberDTO;
 import com.app.dto.teamManagement.TeamDTO;
+import com.app.dto.teamManagement.TeamDetailsDTO;
 import com.app.exceptions.ProjectNotFoundException;
 import com.app.exceptions.TeamNotFoundException;
 import com.app.exceptions.UserNotFoundException;
+import com.app.mappers.TeamDetailsMapper;
 import com.app.mappers.TeamMapper;
 import com.app.mappers.UserMapper;
 import com.app.models.*;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class TeamsServiceImpl implements TeamsService {
     private final TeamRepository teamRepository;
     private final TeamMapper teamMapper;
+    private final TeamDetailsMapper teamDetailsMapper;
     private final ProjectManagerRepository projectManagerRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final UserRepository userRepository;
@@ -75,7 +78,6 @@ public class TeamsServiceImpl implements TeamsService {
             team.setProjectManager(projectManager);
         }
         List<TeamMember> members = team.getMembers();
-        //make the team members that used to be part in the same team and aren't in the new list to be null only when the new list size is not 0
         if (!members.isEmpty() && !teamInputDto.getMembersId().isEmpty()) {
             for (TeamMember member : members) {
                 if (!teamInputDto.getMembersId().contains(member.getId())) {
@@ -83,7 +85,6 @@ public class TeamsServiceImpl implements TeamsService {
                 }
             }
         }
-
         if (teamInputDto.getMembersId() != null) {
             List<TeamMember> users = new ArrayList<>();
             for (Long userId : teamInputDto.getMembersId()) {
@@ -105,8 +106,8 @@ public class TeamsServiceImpl implements TeamsService {
         return true;
     }
     @Override
-    public Optional<TeamDTO> get(Long id) {
-        return teamRepository.findById(id).map(teamMapper::toDto);
+    public Optional<TeamDetailsDTO> get(Long id) {
+        return teamRepository.findById(id).map(teamDetailsMapper::toDto);
     }
 
     @Override
