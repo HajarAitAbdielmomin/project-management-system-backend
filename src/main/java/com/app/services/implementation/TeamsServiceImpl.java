@@ -74,6 +74,15 @@ public class TeamsServiceImpl implements TeamsService {
                     .orElseThrow(() -> new UserNotFoundException("Project Manager with id : "+id+" not found"));
             team.setProjectManager(projectManager);
         }
+        List<TeamMember> members = team.getMembers();
+        //make the team members that used to be part in the same team and aren't in the new list to be null only when the new list size is not 0
+        if (!members.isEmpty() && !teamInputDto.getMembersId().isEmpty()) {
+            for (TeamMember member : members) {
+                if (!teamInputDto.getMembersId().contains(member.getId())) {
+                    member.setTeam(null);
+                }
+            }
+        }
 
         if (teamInputDto.getMembersId() != null) {
             List<TeamMember> users = new ArrayList<>();
