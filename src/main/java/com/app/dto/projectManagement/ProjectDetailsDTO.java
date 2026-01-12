@@ -2,7 +2,6 @@ package com.app.dto.projectManagement;
 
 import com.app.dto.UserRelatedFeature.ProductOwnerDTO;
 import com.app.dto.UserRelatedFeature.ProjectManagerDTO;
-import com.app.dto.UserRelatedFeature.TeamDTO;
 import com.app.models.Project;
 
 import lombok.Value;
