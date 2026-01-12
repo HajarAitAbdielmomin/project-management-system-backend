@@ -1,6 +1,7 @@
 package com.app.dto.teamManagement;
 
 import com.app.models.Project;
+import com.app.models.ProjectManager;
 import com.app.models.TeamMember;
 import com.app.models.User;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public class TeamDetailsDTO implements Serializable {
      String name;
      LocalDateTime createdAt;
      LocalDateTime updatedAt;
-     User projectManager;
+     ProjectManager projectManager;
      List<TeamMember> members;
      Project project;
 }
