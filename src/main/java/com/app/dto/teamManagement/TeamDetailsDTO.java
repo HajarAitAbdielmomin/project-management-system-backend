@@ -23,7 +23,5 @@ import java.util.List;
 public class TeamDetailsDTO implements Serializable {
      long id;
      String name;
-     LocalDateTime createdAt;
-     LocalDateTime updatedAt;
      List<TeamMemberDTO> members;
 }
