@@ -40,4 +40,12 @@ public class TeamController {
         return teamsService.get(id).map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/delete/{id}")
+    //@PreAuthorize("hasRole('project manager')")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long id) {
+        return teamsService.delete(id) ?
+                ResponseEntity.ok("Team deleted successfully") :
+                ResponseEntity.badRequest().body("Something went wrong, check the provided team id");
+    }
 }
