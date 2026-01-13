@@ -1,5 +1,6 @@
 package com.app.dto.teamManagement;
 
+import com.app.dto.UserRelatedFeature.TeamMemberDTO;
 import com.app.models.Project;
 import com.app.models.ProjectManager;
 import com.app.models.TeamMember;
@@ -24,7 +25,5 @@ public class TeamDetailsDTO implements Serializable {
      String name;
      LocalDateTime createdAt;
      LocalDateTime updatedAt;
-     ProjectManager projectManager;
-     List<TeamMember> members;
-     Project project;
+     List<TeamMemberDTO> members;
 }
