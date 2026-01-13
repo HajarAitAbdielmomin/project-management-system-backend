@@ -115,7 +115,7 @@ public class TeamsServiceImpl implements TeamsService {
         return null;
     }
 
-
+    //Not gonna be used
    @Override
    public Optional<List<TeamMemberDTO>> getMembersByTeam(Long id) {
         return teamRepository.findById(id)
@@ -128,6 +128,7 @@ public class TeamsServiceImpl implements TeamsService {
     @Override
     public boolean delete(Long id) {
         Optional<Team> team = teamRepository.findById(id);
+        team.ifPresent(t -> t.getMembers().forEach(member -> member.setTeam(null)));
         team.ifPresent(teamRepository::delete);
         return team.isPresent();
     }
