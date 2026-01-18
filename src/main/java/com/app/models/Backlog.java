@@ -32,7 +32,8 @@ public class Backlog {
 	@NotNull(message = "Status is required")
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private TaskStatus status;
+	@Builder.Default
+	private TaskStatus status = TaskStatus.TODO;
 
 	@DecimalMin(value = "0.0", message = "Progress cannot be less than 0")
 	@DecimalMax(value = "100.0", message = "Progress cannot be more than 100")
