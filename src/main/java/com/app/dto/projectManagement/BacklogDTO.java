@@ -14,8 +14,5 @@ import java.util.*;
 public class BacklogDTO implements Serializable {
     Long id;
     String title;
-    String description;
-    TaskStatus status;
-    float progress;
-    List<Long> tasksIds;
+    Long projectId;
 }
