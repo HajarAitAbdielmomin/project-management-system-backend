@@ -25,7 +25,7 @@ public class Backlog {
 	private Long id;
 
 	@NotBlank(message = "Title is required")
-	@Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
+	@Size(min = 3, max = 300, message = "Title must be between 3 and 300 characters")
 	@Column(nullable = false)
 	private String title;
 
