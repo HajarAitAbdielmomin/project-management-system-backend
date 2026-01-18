@@ -12,7 +12,6 @@ import java.util.*;
  */
 @Value
 public class BacklogDTO implements Serializable {
-    Long id;
     String title;
     Long projectId;
 }
