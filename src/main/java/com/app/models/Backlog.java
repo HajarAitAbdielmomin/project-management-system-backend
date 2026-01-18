@@ -37,7 +37,7 @@ public class Backlog {
 	@DecimalMin(value = "0.0", message = "Progress cannot be less than 0")
 	@DecimalMax(value = "100.0", message = "Progress cannot be more than 100")
 	@Column(nullable = false)
-	private float progress;
+	private float progress = 0;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
