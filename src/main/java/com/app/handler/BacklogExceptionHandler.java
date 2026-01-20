@@ -1,5 +1,6 @@
 package com.app.handler;
 
+import com.app.exceptions.BacklogAlreadyExistsException;
 import com.app.exceptions.BacklogNotFoundException;
 import com.app.exceptions.UnvalidProgressValueException;
 import org.springframework.http.*;
@@ -16,5 +17,10 @@ public class BacklogExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<String> handleProgressNotFoundException(UnvalidProgressValueException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleBacklogAlreadyExistsException(BacklogAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
