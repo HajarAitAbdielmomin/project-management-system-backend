@@ -12,10 +12,16 @@ import com.app.models.Project;
 import com.app.repository.BacklogRepository;
 import com.app.repository.ProjectRepository;
 import com.app.services.BacklogService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
+@Service
+@Transactional
 public class BacklogServiceImpl implements BacklogService {
     BacklogRepository backlogRepository;
     ProjectRepository projectRepository;
