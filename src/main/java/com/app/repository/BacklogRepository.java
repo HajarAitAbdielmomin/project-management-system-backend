@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface BacklogRepository extends JpaRepository<Backlog, Long> {
     List<Backlog> findBacklogsByProject(Project project);
+    boolean existsBacklogByTitle(String title);
 }
