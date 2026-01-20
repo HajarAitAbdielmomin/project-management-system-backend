@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class BacklogController {
-    BacklogServiceImpl backlogService;
+    private final BacklogServiceImpl backlogService;
 
     @PostMapping("/add")
     //@PreAuthorize("hasRole('project manager')")
