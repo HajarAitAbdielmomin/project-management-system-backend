@@ -57,9 +57,23 @@ public class BacklogServiceImpl implements BacklogService {
     }
 
     @Override
-    public boolean update(Long id, BacklogDTO backlogDTO) throws BacklogNotFoundException, ProjectNotFoundException, UnvalidProgressValueException
+    public boolean update(Long id, BacklogDTO backlogDTO) throws BacklogAlreadyExistsException, BacklogNotFoundException, ProjectNotFoundException, UnvalidProgressValueException
     {
-        return false;
+
+        Backlog backlog = backlogRepository.findById(id).orElseThrow(
+                () -> new BacklogNotFoundException(String.format("Backlog with id %d not found", id))
+        );
+
+        if(backlogRepository.existsBacklogByTitleAndIdNot(backlogDTO.getTitle(),id))
+            throw new BacklogAlreadyExistsException("Backlog already exists");
+
+
+        Backlog updatedBacklog = backlogMapper.partialUpdate(backlogDTO, backlog);
+
+
+        backlogRepository.save(updatedBacklog);
+
+        return true;
     }
 
     @Override
