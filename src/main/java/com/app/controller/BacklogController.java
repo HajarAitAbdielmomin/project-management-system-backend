@@ -2,7 +2,9 @@ package com.app.controller;
 
 import com.app.dto.projectManagement.BacklogDTO;
 import com.app.exceptions.BacklogAlreadyExistsException;
+import com.app.exceptions.BacklogNotFoundException;
 import com.app.exceptions.ProjectNotFoundException;
+import com.app.exceptions.UnvalidProgressValueException;
 import com.app.services.implementation.BacklogServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +36,13 @@ public class BacklogController {
                 ResponseEntity.badRequest().body("Backlog deletion failed");
     }
 
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateBacklog(@PathVariable Long id, @Valid @RequestBody BacklogDTO backlogDTO)
+            throws ProjectNotFoundException, BacklogNotFoundException, UnvalidProgressValueException, BacklogAlreadyExistsException
+    {
+        return backlogService.update(id, backlogDTO) ?
+                ResponseEntity.ok().body("Backlog updated successfully") :
+                ResponseEntity.badRequest().body("Backlog updating failed");
+    }
 
 }
