@@ -16,16 +16,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class BacklogServiceImpl implements BacklogService {
-    BacklogRepository backlogRepository;
-    ProjectRepository projectRepository;
-    BacklogMapper backlogMapper;
+    private final BacklogRepository backlogRepository;
+    private final ProjectRepository projectRepository;
+    private final BacklogMapper backlogMapper;
 
     @Override
     public boolean add(BacklogDTO backlogDTO) throws ProjectNotFoundException, BacklogAlreadyExistsException {
