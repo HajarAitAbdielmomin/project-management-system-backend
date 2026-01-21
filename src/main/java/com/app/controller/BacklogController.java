@@ -26,4 +26,13 @@ public class BacklogController {
                 ResponseEntity.ok().body("Backlog created successfully") :
                 ResponseEntity.badRequest().body("Backlog creation failed");
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBacklog(@RequestParam Long id) {
+        return backlogService.delete(id) ?
+                ResponseEntity.ok().body("Backlog deleted successfully") :
+                ResponseEntity.badRequest().body("Backlog deletion failed");
+    }
+
+
 }
