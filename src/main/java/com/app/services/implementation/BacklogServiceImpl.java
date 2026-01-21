@@ -51,7 +51,9 @@ public class BacklogServiceImpl implements BacklogService {
 
     @Override
     public boolean delete(Long id){
-        return false;
+        Optional<Backlog> backlog = backlogRepository.findById(id);
+        backlog.ifPresent(backlogRepository::delete);
+        return backlog.isPresent();
     }
 
     @Override
