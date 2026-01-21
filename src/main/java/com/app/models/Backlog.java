@@ -29,11 +29,18 @@ public class Backlog {
 	@Column(nullable = false)
 	private String title;
 
-	@NotNull(message = "Status is required")
-	@Column(nullable = false)
+	//@NotNull(message = "Status is required")
+	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
 	private TaskStatus status = TaskStatus.TODO;
+
+	@PrePersist
+	public void prePersist() {
+		if (status == null) {
+			status = TaskStatus.TODO;
+		}
+	}
 
 	@DecimalMin(value = "0.0", message = "Progress cannot be less than 0")
 	@DecimalMax(value = "100.0", message = "Progress cannot be more than 100")
