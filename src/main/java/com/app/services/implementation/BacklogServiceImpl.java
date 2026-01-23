@@ -1,11 +1,12 @@
 package com.app.services.implementation;
 
 import com.app.dto.projectManagement.BacklogDTO;
-import com.app.dto.projectManagement.BacklogDetailsDTO;
+import com.app.dto.projectManagement.BacklogDetailsDTo;
 import com.app.exceptions.BacklogAlreadyExistsException;
 import com.app.exceptions.BacklogNotFoundException;
 import com.app.exceptions.ProjectNotFoundException;
 import com.app.exceptions.UnvalidProgressValueException;
+import com.app.mappers.BacklogDetailsMapper;
 import com.app.mappers.BacklogMapper;
 import com.app.models.Backlog;
 import com.app.models.Project;
@@ -29,6 +30,7 @@ public class BacklogServiceImpl implements BacklogService {
     private final BacklogRepository backlogRepository;
     private final ProjectRepository projectRepository;
     private final BacklogMapper backlogMapper;
+    private final BacklogDetailsMapper backlogDetailsMapper;
 
     @Override
     public boolean add(BacklogDTO backlogDTO) throws ProjectNotFoundException, BacklogAlreadyExistsException {
@@ -77,12 +79,13 @@ public class BacklogServiceImpl implements BacklogService {
     }
 
     @Override
-    public Optional<BacklogDTO> getBacklog(Long id){
-        return null;
+    public Optional<BacklogDetailsDTo> getBacklog(Long id){
+        return backlogRepository.findById(id).map(backlogDetailsMapper::toDto);
     }
 
     @Override
-    public List<BacklogDetailsDTO> getAllBacklogsByProject(Long projectId){
-        return null;
+    public List<BacklogDetailsDTo> getAllBacklogsByProject(Long projectId){
+        List<Backlog> backlogs = backlogRepository.findBacklogsByProjectId(projectId);
+        return backlogs.stream().map(backlogDetailsMapper::toDto).toList();
     }
 }
