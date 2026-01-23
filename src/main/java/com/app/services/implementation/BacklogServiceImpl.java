@@ -2,6 +2,7 @@ package com.app.services.implementation;
 
 import com.app.dto.projectManagement.BacklogDTO;
 import com.app.dto.projectManagement.BacklogDetailsDTo;
+import com.app.enums.TaskStatus;
 import com.app.exceptions.BacklogAlreadyExistsException;
 import com.app.exceptions.BacklogNotFoundException;
 import com.app.exceptions.ProjectNotFoundException;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,7 +41,7 @@ public class BacklogServiceImpl implements BacklogService {
 
         if(backlog == null) return false;
 
-        if(backlogRepository.existsBacklogByTitle(backlog.getTitle()))
+        if(backlogRepository.existsBacklogByProject_IdAndTitle(backlogDTO.getProjectId(),backlog.getTitle()))
             throw new BacklogAlreadyExistsException(String.format("Backlog with title %s already exists", backlog.getTitle()));
 
         Project project = projectRepository.findById(backlogDTO.getProjectId()).orElseThrow(
@@ -66,8 +69,14 @@ public class BacklogServiceImpl implements BacklogService {
                 () -> new BacklogNotFoundException(String.format("Backlog with id %d not found", id))
         );
 
-        if(backlogRepository.existsBacklogByTitleAndIdNot(backlogDTO.getTitle(),id))
+        boolean titleExists = backlogRepository.existsBacklogByProject_IdAndTitleAndIdNot(
+                backlog.getProject().getId(), backlogDTO.getTitle(), id);
+
+        if(titleExists)
             throw new BacklogAlreadyExistsException("Backlog already exists");
+
+        if(backlogDTO.getProgress() < 0 || backlogDTO.getProgress() > 100)
+            throw new UnvalidProgressValueException("Progress value must be between 0 and 100");
 
 
         Backlog updatedBacklog = backlogMapper.partialUpdate(backlogDTO, backlog);

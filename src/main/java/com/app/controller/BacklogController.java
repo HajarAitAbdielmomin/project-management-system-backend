@@ -45,4 +45,14 @@ public class BacklogController {
                 ResponseEntity.badRequest().body("Backlog updating failed");
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getBacklog(@PathVariable Long id) {
+        return ResponseEntity.ok(backlogService.getBacklog(id));
+    }
+
+    @GetMapping("/get/all/{projectId}")
+    public ResponseEntity<?> getAllBacklogsByProject(@PathVariable Long projectId) {
+        return ResponseEntity.ok(backlogService.getAllBacklogsByProject(projectId));
+    }
+
 }
