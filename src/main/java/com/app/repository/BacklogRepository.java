@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface BacklogRepository extends JpaRepository<Backlog, Long> {
     List<Backlog> findBacklogsByProjectId(Long id);
-    boolean existsBacklogByTitle(String title);
+    boolean existsBacklogByProject_IdAndTitle(Long projectId, String title);
     boolean existsBacklogByTitleAndIdNot(String title, Long id);
 }
