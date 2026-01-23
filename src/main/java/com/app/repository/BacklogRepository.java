@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface BacklogRepository extends JpaRepository<Backlog, Long> {
-    List<Backlog> findBacklogsByProject(Project project);
+    List<Backlog> findBacklogsByProjectId(Long id);
     boolean existsBacklogByTitle(String title);
     boolean existsBacklogByTitleAndIdNot(String title, Long id);
 }
