@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  */
 @Value
 public class TaskDTO implements Serializable {
-    Long id;
     String title;
     String description;
     TaskStatus status;
