@@ -38,10 +38,17 @@ public class Task {
     @Column(nullable = false)
     private String description;
 
-    @NotNull(message = "Status is required")
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = TaskStatus.TODO;
+        }
+    }
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
