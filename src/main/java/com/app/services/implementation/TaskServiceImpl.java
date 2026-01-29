@@ -62,7 +62,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        Optional<Task> task = taskRepository.findById(id);
+        task.ifPresent(taskRepository::delete);
+        return task.isPresent();
     }
 
     @Override
