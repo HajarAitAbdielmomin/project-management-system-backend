@@ -37,4 +37,11 @@ public class TaskController {
     public Long getTasksCountByMemberId(@PathVariable Long memberId){
         return taskService.getTasksCountByMemberId(memberId);
     }
+    @DeleteMapping("/delete/{id}")
+    //@PreAuthorize("hasRole(project manager)")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id){
+        return taskService.delete(id) ?
+                ResponseEntity.ok().body("Task deleted successfully") :
+                ResponseEntity.badRequest().body("Task deletion failed");
+    }
 }
