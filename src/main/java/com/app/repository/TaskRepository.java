@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findTasksByBacklogId(Long backlogId);
+    boolean existsTaskByBacklog_IdAndTitle(Long backlogId, String title);
 }
