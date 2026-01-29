@@ -27,4 +27,14 @@ public class TaskController {
                 ResponseEntity.ok().body("Task created successfully") :
                 ResponseEntity.badRequest().body("Task creation failed");
     }
+    @GetMapping("/backlog/{id}/count")
+    //@PreAuthorize("hasRole(project manager)")
+    public Long getTasksCountByBacklogId(@PathVariable Long backlogId){
+        return taskService.getTasksCountByBacklogId(backlogId);
+    }
+    @GetMapping("/member/{id}/count")
+    //@PreAuthorize("hasRole(project manager)")
+    public Long getTasksCountByMemberId(@PathVariable Long memberId){
+        return taskService.getTasksCountByMemberId(memberId);
+    }
 }
