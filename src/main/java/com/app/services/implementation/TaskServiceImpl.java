@@ -77,12 +77,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Long getTasksCountByBacklogId(Long backlogId) {
-        return 0L;
+        return taskRepository.countTasksByBacklogId(backlogId);
     }
 
     @Override
     public Long getTasksCountByMemberId(Long memberId) {
-        return 0L;
+        return taskRepository.countTasksByMemberId(memberId);
     }
 
     @Override
