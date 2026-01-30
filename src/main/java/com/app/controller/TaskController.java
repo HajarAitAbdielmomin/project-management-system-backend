@@ -46,12 +46,17 @@ public class TaskController {
                 ResponseEntity.badRequest().body("Task deletion failed");
     }
     @PatchMapping("/update/{id}")
-    //@PreAuthorize("hasRole(project manager)"")
+    //@PreAuthorize("hasRole(project manager)")
     public ResponseEntity<?> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO)
     throws TaskAlreadyExistsException, UserNotFoundException, TaskNotFoundException
     {
         return taskService.update(id, taskDTO) ?
                 ResponseEntity.ok().body("Task updated successfully") :
                 ResponseEntity.badRequest().body("Task updating failed");
+    }
+    @PatchMapping("/get/{id}")
+    //@PreAuthorize("hasRole(project manager)")
+    public ResponseEntity<?> getTask(@PathVariable Long id){
+        return ResponseEntity.ok(taskService.getTask(id));
     }
 }

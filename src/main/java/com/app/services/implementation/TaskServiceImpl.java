@@ -93,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Optional<TaskDetailsDTO> getTask(Long id) {
-        return Optional.empty();
+        return taskRepository.findById(id).map(taskDetailsMapper::toDto);
     }
 
     @Override
