@@ -108,6 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDetailsDTO> getTasksByBacklog(Long backlogId) {
-        return List.of();
+        List<Task> tasks = taskRepository.findTasksByBacklogId(backlogId);
+        return tasks.stream().map(taskDetailsMapper::toDto).toList();
     }
 }

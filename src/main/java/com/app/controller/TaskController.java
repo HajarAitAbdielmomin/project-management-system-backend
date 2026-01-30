@@ -54,9 +54,14 @@ public class TaskController {
                 ResponseEntity.ok().body("Task updated successfully") :
                 ResponseEntity.badRequest().body("Task updating failed");
     }
-    @PatchMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     //@PreAuthorize("hasRole(project manager)")
     public ResponseEntity<?> getTask(@PathVariable Long id){
         return ResponseEntity.ok(taskService.getTask(id));
+    }
+    @GetMapping("/get/all/{backlogId}")
+    //@PreAuthorize("hasRole(project manager)"))
+    public ResponseEntity<?> getTasksByBacklog(@PathVariable Long backlogId){
+        return ResponseEntity.ok(taskService.getTasksByBacklog(backlogId));
     }
 }
