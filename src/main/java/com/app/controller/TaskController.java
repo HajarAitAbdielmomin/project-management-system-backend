@@ -3,6 +3,7 @@ package com.app.controller;
 import com.app.dto.TaskManagement.TaskDTO;
 import com.app.exceptions.BacklogNotFoundException;
 import com.app.exceptions.TaskAlreadyExistsException;
+import com.app.exceptions.TaskNotFoundException;
 import com.app.exceptions.UserNotFoundException;
 import com.app.services.implementation.TaskServiceImpl;
 import jakarta.validation.Valid;
@@ -43,5 +44,14 @@ public class TaskController {
         return taskService.delete(id) ?
                 ResponseEntity.ok().body("Task deleted successfully") :
                 ResponseEntity.badRequest().body("Task deletion failed");
+    }
+    @PatchMapping("/update/{id}")
+    //@PreAuthorize("hasRole(project manager)"")
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO)
+    throws TaskAlreadyExistsException, UserNotFoundException, TaskNotFoundException
+    {
+        return taskService.update(id, taskDTO) ?
+                ResponseEntity.ok().body("Task updated successfully") :
+                ResponseEntity.badRequest().body("Task updating failed");
     }
 }

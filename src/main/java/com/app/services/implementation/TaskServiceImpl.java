@@ -68,8 +68,27 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean update(Long id, TaskDTO taskDTO) throws TaskNotFoundException, UserNotFoundException {
-        return false;
+    public boolean update(Long id, TaskDTO taskDTO) throws TaskAlreadyExistsException,TaskNotFoundException, UserNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(
+                () -> new TaskNotFoundException(String.format("Task with id %d not found", id))
+        );
+
+        if(taskRepository.existsTaskByBacklog_IdAndTitleAndIdNot(taskDTO.getBacklogId(), task.getTitle(), id))
+            throw new TaskAlreadyExistsException("Task already exists");
+
+        Backlog backlog = backlogRepository.findById(taskDTO.getBacklogId()).orElseThrow(
+                () -> new BacklogNotFoundException(String.format("Backlog with id %d not found", taskDTO.getBacklogId()))
+        );
+
+        TeamMember member = teamMemberRepository.findById(taskDTO.getMemberId()).orElseThrow(
+                () -> new UserNotFoundException(String.format("User with id %d not found", taskDTO.getMemberId()))
+        );
+
+        Task updatedTask = taskMapper.partialUpdate(taskDTO, task);
+
+        taskRepository.save(updatedTask);
+
+        return true;
     }
 
     @Override
