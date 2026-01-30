@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface TaskService {
     boolean add(TaskDTO taskDTO) throws BacklogNotFoundException, TaskAlreadyExistsException, UserNotFoundException;
     boolean delete(Long id);
-    boolean update(Long id, TaskDTO taskDTO) throws TaskNotFoundException, UserNotFoundException;
+    boolean update(Long id, TaskDTO taskDTO) throws TaskNotFoundException, UserNotFoundException, TaskAlreadyExistsException;
     Optional<TaskDetailsDTO> getTask(Long id);
     Long getTasksCountByBacklogId(Long backlogId);
     Long getTasksCountByMemberId(Long memberId);
