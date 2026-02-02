@@ -2,6 +2,7 @@ package com.app.repository;
 
 import com.app.models.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     boolean existsTaskByBacklog_IdAndTitleAndIdNot(Long backlogId, String title, Long id);
     Long countTasksByBacklogId(Long backlogId);
     Long countTasksByMemberId(Long memberId);
+    boolean existsByIdAndBacklog_Project_TeamMembers_Id(Long taskId, Long memberId);
+
 }
