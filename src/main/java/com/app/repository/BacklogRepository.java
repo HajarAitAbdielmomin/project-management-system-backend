@@ -14,4 +14,6 @@ public interface BacklogRepository extends JpaRepository<Backlog, Long> {
     List<Backlog> findBacklogsByProjectId(Long id);
     boolean existsBacklogByProject_IdAndTitle(Long projectId, String title);
     boolean existsBacklogByProject_IdAndTitleAndIdNot(Long projectId, String title, Long id);
+    boolean existsByIdAndProject_Team_Members_Id(Long backlogId, Long memberId);
+
 }
