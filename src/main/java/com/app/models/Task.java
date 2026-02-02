@@ -2,10 +2,7 @@ package com.app.models;
 
 import com.app.enums.TaskStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,12 +30,12 @@ public class Task {
     @Column(nullable = false)
     private String title;
 
-    @Null
+
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     @Column(nullable = false)
     private String description;
 
-    @Size(min = 1, message = "Duration must be at least 1 day")
+    @DecimalMin(value = "1", message = "Duration must be at least 1 day")
     @Column(nullable = false)
     private Long duration;
 
