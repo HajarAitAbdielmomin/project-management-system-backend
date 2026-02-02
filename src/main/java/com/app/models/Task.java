@@ -38,6 +38,10 @@ public class Task {
     @Column(nullable = false)
     private String description;
 
+    @Size(min = 1, message = "Duration must be at least 1 day")
+    @Column(nullable = false)
+    private Long duration;
+
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
