@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class TaskDTO implements Serializable {
     String title;
     String description;
+    Long duration;
     TaskStatus status;
     Long memberId;
     Long backlogId;

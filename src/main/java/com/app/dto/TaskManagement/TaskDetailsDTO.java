@@ -20,6 +20,7 @@ public class TaskDetailsDTO implements Serializable {
     private final String title;
     private final String description;
     private final TaskStatus status;
+    private final Long duration;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final LocalDateTime finishedAt;
