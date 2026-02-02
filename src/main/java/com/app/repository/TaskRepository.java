@@ -14,6 +14,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     boolean existsTaskByBacklog_IdAndTitleAndIdNot(Long backlogId, String title, Long id);
     Long countTasksByBacklogId(Long backlogId);
     Long countTasksByMemberId(Long memberId);
-    boolean existsByIdAndBacklog_Project_TeamMembers_Id(Long taskId, Long memberId);
-
 }
