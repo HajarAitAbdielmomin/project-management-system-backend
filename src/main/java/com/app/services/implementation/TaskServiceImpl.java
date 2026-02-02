@@ -2,10 +2,7 @@ package com.app.services.implementation;
 
 import com.app.dto.TaskManagement.TaskDTO;
 import com.app.dto.TaskManagement.TaskDetailsDTO;
-import com.app.exceptions.BacklogNotFoundException;
-import com.app.exceptions.TaskAlreadyExistsException;
-import com.app.exceptions.TaskNotFoundException;
-import com.app.exceptions.UserNotFoundException;
+import com.app.exceptions.*;
 import com.app.mappers.TaskDetailsMapper;
 import com.app.mappers.TaskMapper;
 import com.app.mappers.TeamMapper;
@@ -51,6 +48,9 @@ public class TaskServiceImpl implements TaskService {
         TeamMember teamMember = teamMemberRepository.findById(taskDTO.getMemberId()).orElseThrow(
                 () -> new UserNotFoundException(String.format("User with id %d not found", taskDTO.getMemberId()))
         );
+
+        if(!backlogRepository.existsByIdAndProject_Team_Members_Id(taskDTO.getBacklogId(), taskDTO.getMemberId()))
+            throw new UnauthorizedTaskAccessException( String.format("Member %d is not authorized to work on this task", taskDTO.getMemberId()));
 
         task.setBacklog(backlog);
         task.setMember(teamMember);
