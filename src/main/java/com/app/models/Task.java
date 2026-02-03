@@ -36,6 +36,7 @@ public class Task {
     private String description;
 
     @DecimalMin(value = "1", message = "Duration must be at least 1 day")
+    @DecimalMax(value = "15", message = "Duration must not exceed 15 days")
     @Column(nullable = false)
     private Long duration;
 
