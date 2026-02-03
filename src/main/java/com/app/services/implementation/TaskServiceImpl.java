@@ -32,11 +32,14 @@ public class TaskServiceImpl implements TaskService {
     private final TaskDetailsMapper taskDetailsMapper;
     @Override
     public boolean add(TaskDTO taskDTO)
-            throws BacklogNotFoundException, TaskAlreadyExistsException, UserNotFoundException {
+            throws BacklogNotFoundException, TaskAlreadyExistsException, UserNotFoundException, UnvalidDurationValueException {
 
         Task task = taskMapper.toEntity(taskDTO);
 
         if(task == null) return false;
+
+        if(task.getDuration() > 15 || task.getDuration() < 1)
+            throw new UnvalidDurationValueException("Task duration must be between 1 and 15 days");
 
         if(taskRepository.existsTaskByBacklog_IdAndTitle(taskDTO.getBacklogId(), task.getTitle()))
             throw new TaskAlreadyExistsException(String.format("Task with title %s already exists", task.getTitle()));
@@ -68,21 +71,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean update(Long id, TaskDTO taskDTO) throws TaskAlreadyExistsException,TaskNotFoundException, UserNotFoundException {
+    public boolean update(Long id, TaskDTO taskDTO) throws UnvalidDurationValueException, TaskAlreadyExistsException,TaskNotFoundException, UserNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException(String.format("Task with id %d not found", id))
         );
 
-        if(taskRepository.existsTaskByBacklog_IdAndTitleAndIdNot(taskDTO.getBacklogId(), task.getTitle(), id))
+        if(taskDTO.getDuration() > 15 || taskDTO.getDuration() < 1)
+            throw new UnvalidDurationValueException("Task duration must be between 1 and 15 days");
+
+        if(taskRepository.existsTaskByBacklog_IdAndTitleAndIdNot(task.getBacklog().getId(), taskDTO.getTitle(), id))
             throw new TaskAlreadyExistsException("Task already exists");
 
-        Backlog backlog = backlogRepository.findById(taskDTO.getBacklogId()).orElseThrow(
-                () -> new BacklogNotFoundException(String.format("Backlog with id %d not found", taskDTO.getBacklogId()))
-        );
-
-        TeamMember member = teamMemberRepository.findById(taskDTO.getMemberId()).orElseThrow(
-                () -> new UserNotFoundException(String.format("User with id %d not found", taskDTO.getMemberId()))
-        );
 
         Task updatedTask = taskMapper.partialUpdate(taskDTO, task);
 
