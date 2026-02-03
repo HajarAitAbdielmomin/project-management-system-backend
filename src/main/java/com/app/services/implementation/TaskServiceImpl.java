@@ -110,4 +110,14 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = taskRepository.findTasksByBacklogId(backlogId);
         return tasks.stream().map(taskDetailsMapper::toDto).toList();
     }
+    @Override
+    public boolean isTaskCompletedOnTime(Long taskId){
+        return false;
+    }
+
+    @Override
+    public boolean endTask(Long id) {
+
+        return true;
+    }
 }

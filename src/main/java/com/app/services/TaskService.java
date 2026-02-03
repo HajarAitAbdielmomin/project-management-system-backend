@@ -15,4 +15,6 @@ public interface TaskService {
     Long getTasksCountByBacklogId(Long backlogId);
     Long getTasksCountByMemberId(Long memberId);
     List<TaskDetailsDTO> getTasksByBacklog(Long backlogId);
+    boolean isTaskCompletedOnTime(Long taskId);
+    boolean endTask(Long id);
 }
