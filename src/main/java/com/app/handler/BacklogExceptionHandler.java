@@ -15,7 +15,7 @@ public class BacklogExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleProgressNotFoundException(UnvalidProgressValueException ex) {
+    public ResponseEntity<String> handleProgressValueException(UnvalidProgressValueException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
