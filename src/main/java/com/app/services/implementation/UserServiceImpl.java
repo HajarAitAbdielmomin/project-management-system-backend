@@ -62,4 +62,9 @@ public class UserServiceImpl implements UserService {
         user.ifPresent(userRepository::delete);
         return user.isPresent();
     }
+
+    @Override
+    public Long getTotalNumberOfUsers(){
+        return userRepository.count();
+    }
 }

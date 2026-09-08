@@ -10,4 +10,6 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     Optional<UserDTO> getUser(Long id);
     boolean delete(Long id);
+    Long getTotalNumberOfUsers();
+    //Long getTotalNumberOfUsersByRole();
 }

@@ -40,4 +40,9 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @GetMapping("/users/count")
+    public Long countUsers(){
+        return userService.getTotalNumberOfUsers();
+    }
 }
